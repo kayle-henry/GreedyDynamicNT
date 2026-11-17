@@ -1,0 +1,45 @@
+public class KnapsackGreedy {
+//Greedy-choice: Take the item with the most value under the weight limit
+	/*public static void main(String[] args) {
+		int[] val = {3, 2, 1};
+	    int[] wt = {4 ,5 ,1};
+	    //int[][] item = {val, wt};
+	    int w = 4;
+
+	    System.out.print(knapsackGreedy(w, val, wt));
+		
+	}*/
+	
+	public static int run(int w, Items[] itemsList, long limit, TimeUnit unit) {
+	    long start = System.nanoTime();
+	    long timeLimit = unit.toNanos(limit);
+
+	    if (!Quicksort.sortUntil(itemsList, 0, itemsList.length - 1, start, timeLimit)) {
+	        return 0;
+	    }
+
+	    int sumwt = 0;
+	    int totalVal = 0;
+
+	    for (Items item : itemsList) {
+	        if (System.nanoTime() - start >= timeLimit) {
+	            return totalVal;
+	        }
+
+	        if (item.weight + sumwt <= w) {
+	            sumwt += item.weight;
+	            totalVal += item.value;
+	        }
+	    }
+
+	    return totalVal;
+	}
+
+	/*public static Items[] qs(int wt, Items[] itemsList) {
+		Quicksort.sort(itemsList, 0 , itemsList.length-1);
+		
+		return itemsList;
+	}*/
+	
+
+}

@@ -1,0 +1,90 @@
+public class Quicksort {
+    
+	static int partition(Items[] itemsList, int low, int high)
+	{
+		int pivot = itemsList[high].value; 
+	    int i = (low-1);
+	    for (int j=low; j<high; j++)
+	    {
+	          
+	        // If current element is smaller than or
+	        // equal to pivot
+	        if (itemsList[j].value >= pivot)
+	        {
+	            i++;
+
+	            Items temp = itemsList[i];
+	            itemsList[i] = itemsList[j];
+	            itemsList[j] = temp;
+	            }
+	        }
+
+	        Items temp = itemsList[i+1];
+	        itemsList[i+1] = itemsList[high];
+	        itemsList[high] = temp;
+
+	        return i+1;
+	    }
+
+
+	    /* The main function that implements QuickSort()
+	      a[] --> Array to be sorted,
+	      l  --> Starting index,
+	      h  --> Ending index */
+	static void sort(Items[] itemsList, int l, int h){
+	    if (l < h){
+	        int pi = partition(itemsList, l, h);
+            // Recursively sort elements before
+	        // partition and after partition
+	        sort(itemsList, l, pi-1);
+	        sort(itemsList, pi+1, h);
+	    }
+	    
+	    //for (int i=0; i<itemsList.length; ++i)
+          //  System.out.print(itemsList[i]+" ");
+	    
+	}
+	
+	static boolean sortUntil(Items[] items, int low, int high, long start, long budget) {
+	    if (expired(start, budget)) return false;
+
+	    if (low < high) {
+	        int pivot = partitionUntil(items, low, high, start, budget);
+	        if (pivot < 0) return false;
+
+	        if (!sortUntil(items, low, pivot - 1, start, budget)) return false;
+	        if (!sortUntil(items, pivot + 1, high, start, budget)) return false;
+	    }
+
+	    return !expired(start, budget);
+	}
+
+	private static int partitionUntil(
+	        Items[] items, int low, int high, long start, long budget) {
+	    int pivot = items[high].value;
+	    int i = low - 1;
+
+	    for (int j = low; j < high; j++) {
+	        if (expired(start, budget)) return -1;
+
+	        if (items[j].value >= pivot) {
+	            i++;
+	            Items temp = items[i];
+	            items[i] = items[j];
+	            items[j] = temp;
+	        }
+	    }
+
+	    if (expired(start, budget)) return -1;
+
+	    Items temp = items[i + 1];
+	    items[i + 1] = items[high];
+	    items[high] = temp;
+	    return i + 1;
+	}
+
+	private static boolean expired(long start, long budget) {
+	    return System.nanoTime() - start >= budget;
+	}
+}
+
